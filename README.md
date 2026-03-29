@@ -1,0 +1,2 @@
+Working Mechanism:: User Uploads the resume , then the system exctract the skills from the resume and checks with description provided meaning, resume skills are checked with description provided skills then it gives the ats score, matched score, job recommendations and ai provided feedback of the resume and a report to download.This platformalso contains hte plafroms like unstop, naukar to apply for job.
+ deployment link : https://resume-analyzer-1-pe8f.onrender.com
