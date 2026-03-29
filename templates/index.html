@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Resume Analyzer</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --bg: #ffffff;
+    --card: #f8fafc;
+    --text: #0f172a;
+    --border: #e2e8f0;
+}
+
+.dark {
+    --bg: #020617;
+    --card: #0f172a;
+    --text: #e5e7eb;
+    --border: #1e293b;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.3s;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.toggle {
+    background: #22c55e;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+/* WRAPPER */
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* LEFT */
+.left {
+    max-width: 520px;
+    animation: fadeUp 0.8s ease;
+}
+
+/* RIGHT */
+.right {
+    animation: fadeUp 1s ease;
+}
+
+/* TITLE */
+h1 {
+    font-size: 52px;
+    font-weight: 700;
+}
+
+p {
+    margin-top: 15px;
+    color: #64748b;
+}
+
+/* CARD */
+.upload-box {
+    margin-top: 25px;
+    background: var(--card);
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    transition: 0.3s;
+}
+
+.upload-box:hover {
+    transform: translateY(-4px);
+}
+
+/* INPUT */
+input[type="file"] {
+    margin-bottom: 10px;
+}
+
+/* TEXTAREA */
+textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* BUTTON */
+button {
+    margin-top: 15px;
+    background: #22c55e;
+    color: black;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    background: #16a34a;
+}
+
+/* FEATURE CARD */
+.preview-card {
+    background: var(--card);
+    padding: 25px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    width: 300px;
+}
+
+.preview-card ul {
+    padding-left: 18px;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+<div class="logo">🚀 Resume Analyzer</div>
+<button class="toggle" onclick="toggleMode()">🌙</button>
+</div>
+
+<div class="wrapper">
+
+<!-- LEFT -->
+<div class="left">
+<h1>Check Your Resume Score</h1>
+
+<p>
+Upload your resume and get ATS score, job match, and smart feedback instantly.
+</p>
+
+<form action="/upload" method="post" enctype="multipart/form-data">
+
+<div class="upload-box">
+
+<input type="file" name="resume" accept=".pdf" required>
+
+<textarea name="job_desc" rows="6" placeholder="Paste Job Description..."></textarea>
+
+<button type="submit">Analyze Resume 🚀</button>
+
+</div>
+
+</form>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<div class="preview-card">
+<h3>✨ What You Get</h3>
+
+<ul>
+<li>✔ ATS Score</li>
+<li>✔ Job Match</li>
+<li>✔ Smart Feedback</li>
+<li>✔ Job Suggestions</li>
+<li>✔ Learning Paths</li>
+<li>✔ PDF Report</li>
+</ul>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+function toggleMode() {
+    document.body.classList.toggle("dark");
+
+    const btn = document.querySelector(".toggle");
+
+    if (document.body.classList.contains("dark")) {
+        btn.innerText = "☀️";
+        localStorage.setItem("theme", "dark");
+    } else {
+        btn.innerText = "🌙";
+        localStorage.setItem("theme", "light");
+    }
+}
+
+window.onload = function() {
+    const saved = localStorage.getItem("theme");
+    const btn = document.querySelector(".toggle");
+
+    if (saved === "dark") {
+        document.body.classList.add("dark");
+        btn.innerText = "☀️";
+    }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Resume Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+:root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --green: #22c55e;
+}
+
+.dark {
+    --bg: #020617;
+    --card: rgba(30, 41, 59, 0.6);
+    --text: #e5e7eb;
+}
+
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.3s;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 30px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+/* TOGGLE */
+.toggle {
+    background: var(--green);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* CARD */
+.card {
+    background: var(--card);
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* BEST JOB */
+.best-job {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: black;
+    padding: 15px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* TAG */
+.tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin: 5px;
+    font-size: 12px;
+    background: #e2e8f0;
+}
+
+.dark .tag {
+    background: #334155;
+}
+
+/* FEEDBACK */
+.feedback {
+    background: #dcfce7;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border-left: 5px solid var(--green);
+}
+
+.dark .feedback {
+    background: #14532d;
+}
+
+/* PROGRESS */
+.progress {
+    width: 100%;
+    height: 10px;
+    background: #cbd5f5;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.dark .progress {
+    background: #334155;
+}
+
+.progress div {
+    height: 100%;
+}
+
+/* DOWNLOAD */
+.download {
+    background: var(--green);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+/* PLATFORM BUTTONS */
+.platform {
+    display: inline-block;
+    margin: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: black;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.platform:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(34,197,94,0.5);
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+AI Resume Analyzer 🚀
+<button class="toggle" onclick="toggleMode()">🌙</button>
+</div>
+
+<div class="container">
+
+<!-- CHART -->
+<div class="card">
+<h2>📊 Score Overview</h2>
+<canvas id="chart"></canvas>
+</div>
+
+<!-- MATCH SCORE -->
+<div class="card">
+<h3>🎯 Match Score</h3>
+
+<p style="font-size:22px; font-weight:600;">
+{{ match_score }}%
+</p>
+
+<div class="progress">
+<div style="
+width: {{ match_score }}%;
+background:
+{% if match_score > 80 %} #22c55e
+{% elif match_score > 50 %} #f59e0b
+{% else %} #ef4444
+{% endif %}
+;"></div>
+</div>
+
+<p style="margin-top:10px;">
+{% if match_score > 80 %}
+🔥 Strong Match
+{% elif match_score > 50 %}
+⚡ Moderate Match
+{% else %}
+⚠ Low Match
+{% endif %}
+</p>
+
+</div>
+
+<!-- BEST JOB -->
+<div class="card best-job">
+🔥 Best Match: {{ best_job }}
+</div>
+
+<div class="grid">
+
+<!-- JOBS -->
+<div class="card">
+<h3>💼 Recommended Jobs</h3>
+{% for j in jobs %}
+<span class="tag">{{ j }}</span>
+{% endfor %}
+</div>
+
+<!-- SKILLS -->
+<div class="card">
+<h3>🧠 Skills Detected</h3>
+{% for s in skills %}
+<span class="tag">{{ s }}</span>
+{% endfor %}
+</div>
+
+</div>
+
+<!-- FEEDBACK -->
+<div class="card">
+<h3>🤖 AI Feedback</h3>
+{% for f in feedback %}
+<div class="feedback">✔ {{ f }}</div>
+{% endfor %}
+</div>
+
+<!-- LEARNING -->
+<div class="card">
+<h3>🎓 Learning Recommendations</h3>
+{% for l in learning %}
+<div class="feedback">✔ {{ l }}</div>
+{% endfor %}
+</div>
+
+<!-- DOWNLOAD -->
+<div class="card">
+<a class="download" href="/download/{{ pdf_file }}">⬇ Download Report</a>
+</div>
+
+<!-- 🌐 JOB PLATFORMS -->
+<div class="card">
+<h3>🌐 Apply for Jobs</h3>
+
+<a class="platform" href="https://www.linkedin.com/jobs/" target="_blank">🔗 LinkedIn</a>
+<a class="platform" href="https://www.naukri.com/" target="_blank">🔗 Naukri</a>
+<a class="platform" href="https://www.indeed.com/" target="_blank">🔗 Indeed</a>
+<a class="platform" href="https://unstop.com/jobs" target="_blank">🔗 Unstop</a>
+<a class="platform" href="https://www.foundit.in/" target="_blank">🔗 Foundit</a>
+<a class="platform" href="https://internshala.com/" target="_blank">🔗 Internshala</a>
+<a class="platform" href="https://wellfound.com/jobs" target="_blank">🔗 Wellfound</a>
+<a class="platform" href="https://www.glassdoor.co.in/Job/index.htm" target="_blank">🔗 Glassdoor</a>
+
+</div>
+
+</div>
+
+<script>
+
+const score = Number("{{ score }}") || 0;
+const matchScore = Number("{{ match_score }}") || 0;
+
+// CHART
+new Chart(document.getElementById("chart"), {
+    type: "bar",
+    data: {
+        labels: ["ATS Score", "Match Score"],
+        datasets: [{
+            data: [score, matchScore || 1],
+            backgroundColor: ["#22c55e", "#3b82f6"]
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false }},
+        scales: { y: { beginAtZero: true, max: 100 }}
+    }
+});
+
+// TOGGLE
+function toggleMode() {
+    document.body.classList.toggle("dark");
+
+    const btn = document.querySelector(".toggle");
+
+    if (document.body.classList.contains("dark")) {
+        btn.innerText = "☀️";
+        localStorage.setItem("theme", "dark");
+    } else {
+        btn.innerText = "🌙";
+        localStorage.setItem("theme", "light");
+    }
+}
+
+// LOAD THEME
+window.onload = function() {
+    const saved = localStorage.getItem("theme");
+    const btn = document.querySelector(".toggle");
+
+    if (saved === "dark") {
+        document.body.classList.add("dark");
+        btn.innerText = "☀️";
+    }
+}
+</script>
+
+</body>
+</html>
